@@ -42,7 +42,6 @@
 	<task>
 		<name>actualizar</name>
 		<metadata>
-			<![CDATA[{"transitions":{"resubmit":{"bendpoints":[[303,140]]}},"xy":[328,199]}]]>
 		</metadata>
 		<actions>
 			<action>
@@ -55,9 +54,9 @@
 				<execution-type>onAssignment</execution-type>
 			</action>
 			<notification>
-				<name>Creator Modification Notification</name>
+				<name>Notificación de rechazo o modificación</name>
 				<template>
-					<![CDATA[Your submission was rejected by ${userName}, please modify and resubmit.]]>
+					<![CDATA[Tu documento has sido rechazado por ${userName}, porfavor modificalo y reenvía.]]>
 				</template>
 				<template-language>freemarker</template-language>
 				<notification-type>user-notification</notification-type>
@@ -72,7 +71,7 @@
 		</assignments>
 		<transitions>
 			<transition>
-				<name>resubmit</name>
+				<name>reenviar</name>
 				<target>revisar</target>
 				<default>true</default>
 			</transition>
@@ -85,21 +84,21 @@
 		</metadata>
 		<actions>
 			<notification>
-				<name>Review Notification</name>
+				<name>Notificación de revisión</name>
 				<template>
-					<![CDATA[${userName} sent you a ${entryType} for review in the workflow.]]>
+					<![CDATA[${userName} te envió un ${entryType} para su revisón.]]>
 				</template>
 				<template-language>freemarker</template-language>
 				<notification-type>user-notification</notification-type>
 				<recipients>
-					<user/>
+					<assignees/>
 				</recipients>
 				<execution-type>onAssignment</execution-type>
 			</notification>
 			<notification>
-				<name>Review Completion Notification</name>
+				<name>Notificación de revisión por correo</name>
 				<template>
-					<![CDATA[Your submission has been reviewed and the reviewer has applied the following ${taskComments}.]]>
+					<![CDATA[Tú documento ha sido revisado y te envian los siguientes comentarios: ${taskComments}.]]>
 				</template>
 				<template-language>freemarker</template-language>
 				<notification-type>email</notification-type>
@@ -112,38 +111,13 @@
 		<assignments>
 			<roles>
 				<role>
-					<role-type>organization</role-type>
-					<name>Organization Administrator</name>
-					<auto-create>false</auto-create>
-				</role>
-				<role>
-					<role-type>organization</role-type>
-					<name>Organization Content Reviewer</name>
-					<auto-create>false</auto-create>
-				</role>
-				<role>
-					<role-type>organization</role-type>
-					<name>Organization Owner</name>
-					<auto-create>false</auto-create>
-				</role>
-				<role>
-					<role-type>regular</role-type>
-					<name>Administrator</name>
-					<auto-create>false</auto-create>
-				</role>
-				<role>
-					<role-type>regular</role-type>
-					<name>Portal Content Reviewer</name>
-					<auto-create>false</auto-create>
-				</role>
-				<role>
 					<role-type>site</role-type>
 					<name>Site Administrator</name>
 					<auto-create>false</auto-create>
 				</role>
 				<role>
 					<role-type>site</role-type>
-					<name>Site Content Reviewer</name>
+					<name>Aprobador de documentos</name>
 					<auto-create>false</auto-create>
 				</role>
 				<role>
