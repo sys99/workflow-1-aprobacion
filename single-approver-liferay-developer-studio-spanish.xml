@@ -98,6 +98,7 @@
 			</notification>
 			<notification>
 				<name>Notificación de revisión por correo</name>
+				<description>Notificación de revisión de documento.</description>
 				<template>
 					<![CDATA[Tú documento ha sido revisado y te envian los siguientes comentarios: ${taskComments}.]]>
 				</template>
