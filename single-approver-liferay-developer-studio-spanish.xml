@@ -42,6 +42,7 @@
 	<task>
 		<name>actualizar</name>
 		<metadata>
+			<![CDATA[{"transitions":{"reenviar":{"bendpoints":[[303,140]]}},"xy":[328,199]}]]>
 		</metadata>
 		<actions>
 			<action>
