@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<workflow-definition xmlns="urn:liferay.com:liferay-workflow_6.2.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="urn:liferay.com:liferay-workflow_6.2.0 http://www.liferay.com/dtd/liferay-workflow-definition_6_2_0.xsd"
+>
+
+	<name>1 Aprobación para documentos</name>
+	<description>Un solo aprobador para documentos.</description>
+	<version>1</version>
+	<state>
+		<name>creado</name>
+		<metadata>
+			<![CDATA[{"xy":[36,51]}]]>
+		</metadata>
+		<initial>true</initial>
+		<transitions>
+			<transition>
+				<name>revisar</name>
+				<target>revisar</target>
+				<default>true</default>
+			</transition>
+		</transitions>
+	</state>
+	<state>
+		<name>aprobado</name>
+		<metadata>
+			<![CDATA[{"xy":[380,51]}]]>
+		</metadata>
+		<actions>
+			<action>
+				<name>aprobar</name>
+				<script>
+					<![CDATA[import com.liferay.portal.kernel.workflow.WorkflowStatusManagerUtil;
+					import com.liferay.portal.kernel.workflow.WorkflowConstants;
+					WorkflowStatusManagerUtil.updateStatus(WorkflowConstants.toStatus("approved"), workflowContext);]]>
+				</script>
+				<script-language>groovy</script-language>
+				<execution-type>onEntry</execution-type>
+			</action>
+		</actions>
+	</state>
+	<task>
+		<name>actualizar</name>
+		<metadata>
+			<![CDATA[{"transitions":{"reenviar":{"bendpoints":[[303,140]]}},"xy":[328,199]}]]>
+		</metadata>
+		<actions>
+			<action>
+				<name>rechazar</name>
+				<script>
+					<![CDATA[Packages.com.liferay.portal.kernel.workflow.WorkflowStatusManagerUtil.updateStatus(Packages.com.liferay.portal.kernel.workflow.WorkflowConstants.toStatus("denied"), workflowContext);
+					Packages.com.liferay.portal.kernel.workflow.WorkflowStatusManagerUtil.updateStatus(Packages.com.liferay.portal.kernel.workflow.WorkflowConstants.toStatus("pending"), workflowContext);]]>
+				</script>
+				<script-language>javascript</script-language>
+				<execution-type>onAssignment</execution-type>
+			</action>
+			<notification>
+				<name>Notificación de rechazo o modificación</name>
+				<template>
+					<![CDATA[Tu documento has sido rechazado por ${userName}, porfavor modificalo y reenvía.]]>
+				</template>
+				<template-language>freemarker</template-language>
+				<notification-type>user-notification</notification-type>
+				<recipients>
+					<user/>
+				</recipients>
+				<execution-type>onAssignment</execution-type>
+			</notification>
+		</actions>
+		<assignments>
+			<user/>
+		</assignments>
+		<transitions>
+			<transition>
+				<name>reenviar</name>
+				<target>revisar</target>
+				<default>true</default>
+			</transition>
+		</transitions>
+	</task>
+	<task>
+		<name>revisar</name>
+		<metadata>
+			<![CDATA[{"xy":[168,36]}]]>
+		</metadata>
+		<actions>
+			<notification>
+				<name>Notificación de revisión</name>
+				<template>
+					<![CDATA[${userName} te envió un ${entryType} para su revisón.]]>
+				</template>
+				<template-language>freemarker</template-language>
+				<notification-type>user-notification</notification-type>
+				<recipients>
+					<assignees/>
+				</recipients>
+				<execution-type>onAssignment</execution-type>
+			</notification>
+			<notification>
+				<name>Notificación de revisión por correo</name>
+				<description>Notificación de revisión de documento.</description>
+				<template>
+					<![CDATA[Tú documento ha sido revisado y te envian los siguientes comentarios: ${taskComments}.]]>
+				</template>
+				<template-language>freemarker</template-language>
+				<notification-type>email</notification-type>
+				<recipients>
+					<user/>
+				</recipients>
+				<execution-type>onExit</execution-type>
+			</notification>
+		</actions>
+		<assignments>
+			<user>
+				<user-id>35075</user-id>
+			</user>
+		</assignments>
+		<transitions>
+			<transition>
+				<name>aprobar</name>
+				<target>aprobado</target>
+				<default>true</default>
+			</transition>
+			<transition>
+				<name>rechazar</name>
+				<target>actualizar</target>
+				<default>false</default>
+			</transition>
+		</transitions>
+	</task>
+</workflow-definition>
